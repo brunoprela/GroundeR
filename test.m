@@ -8,10 +8,11 @@ Sen = getSentenceData(fn2);
 proposals = load(fn3);
 proposals_matrix = proposals.cur_bbxes;
 
-queryList = [];
-boxList = [];
-wordList = [];
-
+queryList = {};
+boxList = {};
+wordList = {};
+propList = {};
+propidList = {};
 %get list of all query: get all phrases listed in flicker
 %this has a lot of repetetion.
 % for i = 1:numel(Sen)
@@ -34,14 +35,37 @@ for i = 1:numel(Ann.id)
             queryList = [queryList, Ann.id{i}];
             box = Ann.labels(boxindex{1}(j, 1)).boxes;
             boxList = [boxList, box];
-            disp(box);
-            [prop_list, best_box] = getProp(proposals_matrix, box);
+            [a, b] = size(box)
+            if b == 4
+                [prop_list, best_box] = getPosp(proposals_matrix, box);
+            else
+                disp(box)
+                prop_list = [];
+                best_box = [];
+            end
+            propList = [propList, prop_list]
+            propidList = [propidList, best_box]
             %disp(prop_list)
+            
+                
         end
     else 
+        
         queryList = [queryList, Ann.id{i}];
-        boxList = [boxList, boxindex{1}];
-        [prop_list, best_box] = getProp(proposals_matrix, box);
+        box = Ann.labels(boxindex{1}).boxes;
+        boxList = [boxList, box];
+        [a, b] = size(box)
+            if b == 4
+                [prop_list, best_box] = getPosp(proposals_matrix, box);
+            else
+                prop_list = [];
+                best_box = [];
+            end
+            
+        %[prop_list, best_box] = getPosp(proposals_matrix, box);
+        propList = [propList, prop_list]
+        propidList = [propidList, best_box]
+            
     end
     %getwordID sequences for this phrase (now those are just words)
     wordID = [];
@@ -58,3 +82,6 @@ for i = 1:numel(Ann.id)
         wordList = [wordList, wordID]
     end
 end
+
+save 6609688031.mat queryList boxList wordList propList propidList
+ 
