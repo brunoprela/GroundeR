@@ -32,14 +32,14 @@ for i = 1:numel(Ann.id)
     [m, n] = size(boxindex{1});
     if m > 1
         for j = 1:m
-            queryList = [queryList, Ann.id{i}];
+            
             box = Ann.labels(boxindex{1}(j, 1)).boxes;
             boxList = [boxList, box];
             [a, b] = size(box)
             if b == 4
+                queryList = [queryList, Ann.id{i}];
                 [prop_list, best_box] = getPosp(proposals_matrix, box);
             else
-                disp(box)
                 prop_list = [];
                 best_box = [];
             end
@@ -51,11 +51,12 @@ for i = 1:numel(Ann.id)
         end
     else 
         
-        queryList = [queryList, Ann.id{i}];
+        
         box = Ann.labels(boxindex{1}).boxes;
         boxList = [boxList, box];
         [a, b] = size(box)
             if b == 4
+                queryList = [queryList, Ann.id{i}];
                 [prop_list, best_box] = getPosp(proposals_matrix, box);
             else
                 prop_list = [];
