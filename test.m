@@ -21,30 +21,31 @@ wordList = [];
 %all this is not stored
 for i = 1:numel(Ann.id)
     %getBox if multiple chose first one
+    
+    %disp(Ann.id{i})
     boxindex = Ann.idToLabel(i);
-    index = 0;
-    if length(boxindex) > 1
-        for j = 1:numel(boxindex)
-            append(queryList, Ann.id(i));
-            append(boxList, boxindex(j));
+    [m, n] = size(boxindex{1});
+    if m > 1
+        for j = 1:m
+            queryList = [queryList, Ann.id{i}];
+            boxList = [boxList, boxindex{1}(j, 1)];
         end
     else 
-        append(queryList, Ann.id(i));
-        append(boxList, boxindex);
+        queryList = [queryList, Ann.id{i}];
+        boxList = [boxList, boxindex{1}];
     end
-    box = Ann.labels(index);
     %getwordID sequences for this phrase (now those are just words)
     wordID = [];
     for j = 1:numel(Sen)
         temp = Sen(j).phraseID;
         for k = 1:numel(temp)
-            if temp(k) == Ann.id(i) and length(wordID) == 0 
+            if and((temp{k} == Ann.id{i}),(isempty(wordID))) 
                 wordID = Sen(j).phrases(k);
             end
         end
     end
     
     for j = 1:numel(boxindex)
-        append(wordList, wordID)
+        wordList = [wordList, wordID]
     end
 end
