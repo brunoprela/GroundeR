@@ -34,15 +34,19 @@ for i = 1:numel(Ann.id)
         for j = 1:m
             
             box = Ann.labels(boxindex{1}(j, 1)).boxes;
-            boxList = [boxList, box];
+            
             [a, b] = size(box)
             if b == 4
-                queryList = [queryList, Ann.id{i}];
+                
                 [prop_list, best_box] = getPosp(proposals_matrix, box);
             else
+                %for when there's no box
+                box = [0, 0, 0, 0];
                 prop_list = [];
-                best_box = [];
+                best_box = [-1];
             end
+            queryList = [queryList, Ann.id{i}];
+            boxList = [boxList, box];
             propList = [propList, prop_list]
             propidList = [propidList, best_box]
             %disp(prop_list)
@@ -53,16 +57,19 @@ for i = 1:numel(Ann.id)
         
         
         box = Ann.labels(boxindex{1}).boxes;
-        boxList = [boxList, box];
+        
         [a, b] = size(box)
-            if b == 4
-                queryList = [queryList, Ann.id{i}];
-                [prop_list, best_box] = getPosp(proposals_matrix, box);
-            else
-                prop_list = [];
-                best_box = [];
-            end
+        if b == 4
+
+            [prop_list, best_box] = getPosp(proposals_matrix, box);
+        else
             
+            box = [0, 0, 0, 0];
+            prop_list = [];
+            best_box = [-1];
+        end
+        queryList = [queryList, Ann.id{i}];
+        boxList = [boxList, box];    
         %[prop_list, best_box] = getPosp(proposals_matrix, box);
         propList = [propList, prop_list]
         propidList = [propidList, best_box]
