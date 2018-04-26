@@ -35,7 +35,7 @@ for i = 1:numel(Ann.id)
             box = Ann.labels(boxindex{1}(j, 1)).boxes;
             boxList = [boxList, box];
             disp(box);
-            %prop_list = get_prop(proposals_matrix, box);
+            prop_list = getProp(proposals_matrix, box);
             %disp(prop_list)
         end
     else 
