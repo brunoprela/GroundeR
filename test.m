@@ -35,12 +35,13 @@ for i = 1:numel(Ann.id)
             box = Ann.labels(boxindex{1}(j, 1)).boxes;
             boxList = [boxList, box];
             disp(box);
-            prop_list = getProp(proposals_matrix, box);
+            [prop_list, best_box] = getProp(proposals_matrix, box);
             %disp(prop_list)
         end
     else 
         queryList = [queryList, Ann.id{i}];
         boxList = [boxList, boxindex{1}];
+        [prop_list, best_box] = getProp(proposals_matrix, box);
     end
     %getwordID sequences for this phrase (now those are just words)
     wordID = [];
