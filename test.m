@@ -1,8 +1,12 @@
 fn1 = './Flickr30kEntities/Annotations/6609688031.xml' ;
 fn2 = './Flickr30kEntities/Sentences/6609688031.txt';
+fn3 = './flickr30k_img_bbx_ss/6609688031.mat';
+
 Ann = getAnnotations(fn1);
 Sen = getSentenceData(fn2);
 
+proposals = load(fn3);
+proposals_matrix = proposals.cur_bbxes;
 
 queryList = [];
 boxList = [];
@@ -28,7 +32,11 @@ for i = 1:numel(Ann.id)
     if m > 1
         for j = 1:m
             queryList = [queryList, Ann.id{i}];
-            boxList = [boxList, boxindex{1}(j, 1)];
+            box = Ann.labels(boxindex{1}(j, 1)).boxes;
+            boxList = [boxList, box];
+            disp(box);
+            %prop_list = get_prop(proposals_matrix, box);
+            %disp(prop_list)
         end
     else 
         queryList = [queryList, Ann.id{i}];
