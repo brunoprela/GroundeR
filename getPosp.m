@@ -1,26 +1,29 @@
 function [pos_all, best_box] = getPosp( proposals, ground_truth)
         pos_all = [];
         best = 0;
-        best_box = [];
+        count = 0;
+        best_box = -1;
         [a, b] = size(ground_truth);
         
         [m, n] = size(proposals);
-        for i = 1:numel(m)
+        for i = 1:m
+            %disp(i)
             % note that we record the corresponding row of the box
             cur = proposals(i, :);
             temp = get_iou(cur, ground_truth);
+            %disp(temp);
 
-
-            if temp > 0.5
+            if temp >= 0.4
                 pos_all = [pos_all, i];
+                count = count + 1;
                 if temp > best
                     best = temp;
-                    best_box = i;
+                    best_box = count;
                 end
             end 
         end
-        if best == 0
-            best_box = -1;
+        if isempty(pos_all)
+            pos_all = [-2];
         end
         
 end
@@ -37,5 +40,5 @@ function iou = get_iou(b1, b2)
 end
 
 function area = get_area(w, h)
-    area = w * h;
+    area = (w + 1) * (h + 1);
 end
