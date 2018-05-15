@@ -13,19 +13,19 @@
 %     fn3 = strcat('./flickr30k_img_bbx_ss/', curline, '.mat');
 
 files = dir('./Flickr30kEntities/Annotations/*.xml');
-for f = files'
-    curline = f.name(1:end-4);
-    disp(curline);
-    fn1 = strcat('./Flickr30kEntities/Annotations/',curline, '.xml') ;
-    fn2 = strcat('./Flickr30kEntities/Sentences/',curline, '.txt') ;
-    fn3 = strcat('./flickr30k_img_bbx_ss/', curline, '.mat');
-    
+% for f = files'
+%     curline = f.name(1:end-4);
+%     disp(curline);
+%     fn1 = strcat('./Flickr30kEntities/Annotations/',curline, '.xml') ;
+%     fn2 = strcat('./Flickr30kEntities/Sentences/',curline, '.txt') ;
+%     fn3 = strcat('./flickr30k_img_bbx_ss/', curline, '.mat');
+%     
     
 
-%     fn1 = './Flickr30kEntities/Annotations/6609688031.xml' ;
-%     fn2 = './Flickr30kEntities/Sentences/6609688031.txt';
-%     fn3 = './flickr30k_img_bbx_ss/6609688031.mat';
-%     curline = '1001773457;';
+    fn1 = './Flickr30kEntities/Annotations/2612125121.xml' ;
+    fn2 = './Flickr30kEntities/Sentences/2612125121.txt';
+    fn3 = './flickr30k_img_bbx_ss/2612125121.mat';
+    curline = '2612125121;';
 
     Ann = getAnnotations(fn1);
     Sen = getSentenceData(fn2);
@@ -141,5 +141,5 @@ for f = files'
     end
     temp = strcat('./annotation/', curline, '.mat');
     save(temp, 'queryList', 'boxList', 'wordList', 'propList', 'propidList');
-end
+%end
  
