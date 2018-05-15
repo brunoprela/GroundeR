@@ -13,7 +13,7 @@ function [pos_all, best_box] = getPosp( proposals, ground_truth)
             temp = get_iou(cur, ground_truth);
             %disp(temp);
 
-            if temp >= 0.4
+            if temp >= 0.5
                 pos_all = [pos_all, i];
                 count = count + 1;
                 if temp > best
