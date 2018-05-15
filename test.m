@@ -81,13 +81,27 @@ files = dir('./Flickr30kEntities/Annotations/*.xml');
                 %nobox = curLabel.nobox;
                 %[a, b] = size(box)
                 %disp(isempty(nobox));
-                if isempty(curLabel.nobox)
+                if ~isempty(curLabel.box)
                     [prop_list, best_box] = getPosp(proposals_matrix, box);
-                elseif curLabel.nobox == 1
+                else
+                    if curLabel.scene == 1 && curLabel.nobox == 1
+                        disp(curline);
+                    end
+                    if curLabel.scene == 0 && curLabel.nobox == 0
+                        disp(curline);
+                    end
+                   
+                    if curLabel.scene == 1
+                        xmax = Ann.dims{1};
+                        ymax = Ann.dims{2};
+                        box = [0, 0, xmax, ymax];
+                        [prop_list, best_box] = getPosp(proposals_matrix, box);
+                    elseif curLabel.nobox == 1
                     %for when there's no box
-                    box = [0, 0, 0, 0];
-                    prop_list = [-1];
-                    best_box = [-1];
+                        box = [0, 0, 0, 0];
+                        prop_list = [-1];
+                        best_box = [-1];
+                    end
                 end
                 for t = 1:pcount
                     queryList = [queryList, Ann.id{i}];
