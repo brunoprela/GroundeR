@@ -133,7 +133,7 @@ if __name__ == '__main__':
 	# print annotation;
 	#get_gt_pos_all()
 	for f in os.listdir('./Flickr30kEntities/Annotations'):
-		fn = './annotations/' + f[:-4] + '.mat';
+		fn = './annotation/' + f[:-4] + '.mat';
 		read_mat(fn);
 
 		#read_mat('./6609688031.mat');
