@@ -14,11 +14,11 @@ FLICKR_ANNOTATIONS_PATH = '/Users/brunoprela/Documents/Projects/6.883/Flickr30kE
 FLICKR_SENTENCES_PATH = '/Users/brunoprela/Documents/Projects/6.883/Flickr30kEntities/Sentences'
 
 
-def read_mat(fn):
+def read_mat(fn, dictionary):
 	mat = scipy.io.loadmat(fn);
-	dictionary = {};
-	size = 0;
-
+	#dictionary = {};
+	size = len(dictonrary);
+	# read .mat file and convert to the right format in python 
 	result = {};
 	temp = mat['propList'];
 	temp2 = [];
@@ -132,9 +132,10 @@ if __name__ == '__main__':
 	# annotation = eng.getAnnotations(fn);
 	# print annotation;
 	#get_gt_pos_all()
+	dictionary = {};
 	for f in os.listdir('./Flickr30kEntities/Annotations'):
 		fn = './annotation/' + f[:-4] + '.mat';
-		read_mat(fn);
+		read_mat(fn, dictionary);
 
 		#read_mat('./6609688031.mat');
 	
