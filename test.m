@@ -139,7 +139,7 @@ for f = files'
 %             wordList = [wordList, wordID]
 %         end
     end
-    temp = strcat(curline, '.mat');
+    temp = strcat('./annotation/', curline, '.mat');
     save(temp, 'queryList', 'boxList', 'wordList', 'propList', 'propidList');
 end
  
