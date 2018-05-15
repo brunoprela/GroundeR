@@ -1,9 +1,10 @@
 import numpy as np
-import pandas as pd
-import selectivesearch
+#import pandas as pd
+#import selectivesearch
 import os
-import imageio
-
+#import imageio
+import scipy.io
+import pickle
 
 # Constants
 # TODO: Bruno: should change these, perhaps put them in an environment vars files
@@ -11,6 +12,49 @@ ANNOTATION_TOKEN_PATH = '/Users/brunoprela/Documents/Projects/6.883/flickr30k_im
 FLICKR_IMAGE_PATH = '/Users/brunoprela/Documents/Projects/6.883/flickr30k_images/flickr30k_images'
 FLICKR_ANNOTATIONS_PATH = '/Users/brunoprela/Documents/Projects/6.883/Flickr30kEntities/Annotations'
 FLICKR_SENTENCES_PATH = '/Users/brunoprela/Documents/Projects/6.883/Flickr30kEntities/Sentences'
+
+
+def read_mat(fn):
+	mat = scipy.io.loadmat(fn);
+	dictionary = {};
+	size = 0;
+
+	result = {};
+	temp = mat['propList'];
+	temp2 = [];
+	for i in range(len(temp[0])):
+		temp_list = temp[0][i][0].astype(int).tolist();
+		if (len(temp_list) == 1) and (temp_list[0] == -2):
+			temp_list = [];
+		temp2.append(temp_list);
+	result['gt_pos_all'] = temp2;
+	temp = mat['propidList'];
+	result['pos_id'] = [temp[0][i].astype(int)[0][0] for i in range(len(temp[0]))];
+	#print(result['pos_id'])
+	temp = mat['wordList'][0]
+	temp2 = [];
+	for i in range(len(temp)):
+		temp_list = [temp[i][j][0].astype('str')[0] for j in range(len(temp[i]))];
+		final_list = [];
+		for w in temp_list:
+			if w not in dictionary:
+				dictionary[w] = size;
+				final_list.append(size);
+				size += 1;
+			else:
+				final_list.append(dictionary[w]);
+
+	 	temp2.append(final_list);
+	result['sens'] = temp2;
+	temp = mat['boxList'][0]
+	print(len(temp[0]))
+	temp2 = [temp[i][0].astype(int) for i in range(len(temp))]
+	result['gt_box'] = np.asmatrix(temp2);
+	print(result);
+	f = open('./annotation/6609688031.pkl', 'wb');
+	pickle.dump(result, f, protocol=pickle.HIGHEST_PROTOCOL);
+	f.close();
+	
 
 # Helper Functions
 
@@ -87,6 +131,10 @@ if __name__ == '__main__':
 	# #print type(eng.getAnnotations())
 	# annotation = eng.getAnnotations(fn);
 	# print annotation;
-	get_gt_pos_all()
+	#get_gt_pos_all()
+	read_mat('./6609688031.mat');
+	
+
+
 
 
