@@ -13,19 +13,19 @@
 %     fn3 = strcat('./flickr30k_img_bbx_ss/', curline, '.mat');
 
 files = dir('./Flickr30kEntities/Annotations/*.xml');
-% for f = files'
-%     curline = f.name(1:end-4);
-%     disp(curline);
-%     fn1 = strcat('./Flickr30kEntities/Annotations/',curline, '.xml') ;
-%     fn2 = strcat('./Flickr30kEntities/Sentences/',curline, '.txt') ;
-%     fn3 = strcat('./flickr30k_img_bbx_ss/', curline, '.mat');
-%     
+for f = files'
+    curline = f.name(1:end-4);
+    disp(curline);
+    fn1 = strcat('./Flickr30kEntities/Annotations/',curline, '.xml') ;
+    fn2 = strcat('./Flickr30kEntities/Sentences/',curline, '.txt') ;
+    fn3 = strcat('./flickr30k_img_bbx_ss/', curline, '.mat');
+    
     
 
-    fn1 = './Flickr30kEntities/Annotations/2612125121.xml' ;
-    fn2 = './Flickr30kEntities/Sentences/2612125121.txt';
-    fn3 = './flickr30k_img_bbx_ss/2612125121.mat';
-    curline = '2612125121;';
+%     fn1 = '../Flickr30kEntities/Annotations/2612125121.xml' ;
+%     fn2 = '../Flickr30kEntities/Sentences/2612125121.txt';
+%     fn3 = '../flickr30k_img_bbx_ss/2612125121.mat';
+%     curline = '2612125121;';
 
     Ann = getAnnotations(fn1);
     Sen = getSentenceData(fn2);
@@ -81,12 +81,13 @@ files = dir('./Flickr30kEntities/Annotations/*.xml');
                 %nobox = curLabel.nobox;
                 %[a, b] = size(box)
                 %disp(isempty(nobox));
+                
                 if isempty(curLabel.scene) && isempty(curLabel.nobox)
                     [prop_list, best_box] = getPosp(proposals_matrix, box);
                 else
                     if ~isempty(curLabel.scene)
                         if ~isempty(curLabel.nobox)
-                            disp(curline)
+                            disp(strcat(curline, 'both scene and no box'))
                         else 
                             xmax = Ann.dims{1};
                             ymax = Ann.dims{2};
@@ -140,7 +141,7 @@ files = dir('./Flickr30kEntities/Annotations/*.xml');
             else
                 if ~isempty(curLabel.scene)
                     if ~isempty(curLabel.nobox)
-                        disp(curline)
+                        disp(strcat(curline, 'both scene and no box'))
                     else 
                         xmax = Ann.dims{1};
                         ymax = Ann.dims{2};
@@ -172,6 +173,7 @@ files = dir('./Flickr30kEntities/Annotations/*.xml');
 %                         best_box = [-1];
 %                     end
             end
+            
             for t = 1:pcount
                 queryList = [queryList, Ann.id{i}];
                 boxList = [boxList, box];    
@@ -197,8 +199,11 @@ files = dir('./Flickr30kEntities/Annotations/*.xml');
 %             wordList = [wordList, wordID]
 %         end
     end
-    if 
+    len = length(queryList);
+    if (length(boxList) ~= len) || (length(wordList) ~= len) || (length(propList) ~= len) || (length(propidList) ~= len)
+        disp(strcat(curline, 'length error'))
+    end
     temp = strcat('./annotation/', curline, '.mat');
     save(temp, 'queryList', 'boxList', 'wordList', 'propList', 'propidList');
-%end
+end
  
