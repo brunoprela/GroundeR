@@ -197,6 +197,7 @@ files = dir('./Flickr30kEntities/Annotations/*.xml');
 %             wordList = [wordList, wordID]
 %         end
     end
+    if 
     temp = strcat('./annotation/', curline, '.mat');
     save(temp, 'queryList', 'boxList', 'wordList', 'propList', 'propidList');
 %end
