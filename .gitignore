@@ -7,3 +7,4 @@ annotation/*.pkl
 mat/*.mat
 annotation2/*.mat
 model/*
+log/*
