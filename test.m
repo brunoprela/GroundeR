@@ -22,10 +22,10 @@ for f = files'
     
     
 
-%     fn1 = './Flickr30kEntities/Annotations/6609688031.xml' ;
-%     fn2 = './Flickr30kEntities/Sentences/6609688031.txt';
-%     fn3 = './flickr30k_img_bbx_ss/6609688031.mat';
-%     curline = '1001773457;';
+%     fn1 = '../Flickr30kEntities/Annotations/2612125121.xml' ;
+%     fn2 = '../Flickr30kEntities/Sentences/2612125121.txt';
+%     fn3 = '../flickr30k_img_bbx_ss/2612125121.mat';
+%     curline = '2612125121;';
 
     Ann = getAnnotations(fn1);
     Sen = getSentenceData(fn2);
@@ -81,13 +81,43 @@ for f = files'
                 %nobox = curLabel.nobox;
                 %[a, b] = size(box)
                 %disp(isempty(nobox));
-                if isempty(curLabel.nobox)
+                
+                if isempty(curLabel.scene) && isempty(curLabel.nobox)
                     [prop_list, best_box] = getPosp(proposals_matrix, box);
-                elseif curLabel.nobox == 1
-                    %for when there's no box
-                    box = [0, 0, 0, 0];
-                    prop_list = [-1];
-                    best_box = [-1];
+                else
+                    if ~isempty(curLabel.scene)
+                        if ~isempty(curLabel.nobox)
+                            disp(strcat(curline, 'both scene and no box'))
+                        else 
+                            xmax = Ann.dims{1};
+                            ymax = Ann.dims{2};
+                            box = [0, 0, xmax, ymax];
+                            [prop_list, best_box] = getPosp(proposals_matrix, box);
+                        end
+                    else
+                        box = [0, 0, 0, 0];
+                        prop_list = [-1];
+                        best_box = [-1];
+                    end
+                 
+%                     if curLabel.scene == 1 && curLabel.nobox == 1
+%                         disp(curline);
+%                     end
+%                     if curLabel.scene == 0 && curLabel.nobox == 0
+%                         disp(curline);
+%                     end
+%                    
+%                     if curLabel.scene == 1
+%                         xmax = Ann.dims{1};
+%                         ymax = Ann.dims{2};
+%                         box = [0, 0, xmax, ymax];
+%                         [prop_list, best_box] = getPosp(proposals_matrix, box);
+%                     elseif curLabel.nobox == 1
+%                     %for when there's no box
+%                         box = [0, 0, 0, 0];
+%                         prop_list = [-1];
+%                         best_box = [-1];
+%                     end
                 end
                 for t = 1:pcount
                     queryList = [queryList, Ann.id{i}];
@@ -106,14 +136,44 @@ for f = files'
             %box = Ann.labels(boxindex{1}).boxes;
 
             %[a, b] = size(box)
-            if isempty(curLabel.nobox)
+            if isempty(curLabel.scene) && isempty(curLabel.nobox)
+                    [prop_list, best_box] = getPosp(proposals_matrix, box);
+            else
+                if ~isempty(curLabel.scene)
+                    if ~isempty(curLabel.nobox)
+                        disp(strcat(curline, 'both scene and no box'))
+                    else 
+                        xmax = Ann.dims{1};
+                        ymax = Ann.dims{2};
+                        box = [0, 0, xmax, ymax];
+                        [prop_list, best_box] = getPosp(proposals_matrix, box);
+                    end
+                else
+                    box = [0, 0, 0, 0];
+                    prop_list = [-1];
+                    best_box = [-1];
+                end
 
-                [prop_list, best_box] = getPosp(proposals_matrix, box);
-            elseif curLabel.nobox == 1
-                box = [0, 0, 0, 0];
-                prop_list = [-1];
-                best_box = [-1];
+%                     if curLabel.scene == 1 && curLabel.nobox == 1
+%                         disp(curline);
+%                     end
+%                     if curLabel.scene == 0 && curLabel.nobox == 0
+%                         disp(curline);
+%                     end
+%                    
+%                     if curLabel.scene == 1
+%                         xmax = Ann.dims{1};
+%                         ymax = Ann.dims{2};
+%                         box = [0, 0, xmax, ymax];
+%                         [prop_list, best_box] = getPosp(proposals_matrix, box);
+%                     elseif curLabel.nobox == 1
+%                     %for when there's no box
+%                         box = [0, 0, 0, 0];
+%                         prop_list = [-1];
+%                         best_box = [-1];
+%                     end
             end
+            
             for t = 1:pcount
                 queryList = [queryList, Ann.id{i}];
                 boxList = [boxList, box];    
@@ -138,6 +198,10 @@ for f = files'
 %         for j = 1:m
 %             wordList = [wordList, wordID]
 %         end
+    end
+    len = length(queryList);
+    if (length(boxList) ~= len) || (length(wordList) ~= len) || (length(propList) ~= len) || (length(propidList) ~= len)
+        disp(strcat(curline, 'length error'))
     end
     temp = strcat('./annotation/', curline, '.mat');
     save(temp, 'queryList', 'boxList', 'wordList', 'propList', 'propidList');
