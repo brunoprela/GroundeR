@@ -2,10 +2,9 @@ import tensorflow as tf
 import os, sys
 import numpy as np
 import time
-import pdb
 
 #Provides data in batches for training and reads test feat for test
-from dataprovider_unsupervise import dataprovider
+from dataprovider_unsupervise_test import dataprovider
 #Provides the model and loss functions for grouding algo
 from model_unsupervise import ground_model
 #Utility functions to compute iou
@@ -21,7 +20,7 @@ args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 class Config(object):
-    batch_size = 40
+    batch_size = 50
     img_feat_dir = './feature'
     sen_dir = './annotation'
     train_file_list = 'flickr30k_train_val.lst'
@@ -87,9 +86,14 @@ def run_eval(sess, dataprovider, model, eval_op, feed_dict):
             num_corr = 0
             num_sample = len(bbx_gt_batch)
             img_feat = feed_dict[model.vis_data]
+           # print(num_sample)
+            #num_sample = min(num_sample_temp, len(img_feat));
+            
+
             for i in range(num_sample):
                 img_feat[i] = img_feat_raw
             sen_feat = feed_dict[model.sen_data]
+            #print(len(sen_feat))
             sen_feat[:num_sample] = sen_feat_batch
             mask_data = feed_dict[model.msk_data]
             mask_data[:num_sample] = mask_batch
@@ -121,6 +125,8 @@ def run_training():
     config = Config()
     train_list = load_img_id_list(config.train_file_list)
     test_list = load_img_id_list(config.test_file_list)
+    # train_list = np.array([1295719054, 4726677489]).astype('int');
+    # test_list = np.array([1295719054,4726677489]).astype('int');
 
     #Directory to save model Info
     config.save_path = config.save_path + '_' + args.model_name

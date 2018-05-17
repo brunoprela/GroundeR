@@ -2,4 +2,8 @@ env/*
 .idea/*
 data/*
 feature/*
+*.pyc
 annotation/*.pkl
+mat/*.mat
+annotation2/*.mat
+model/*

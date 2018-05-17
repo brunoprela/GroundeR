@@ -2,6 +2,7 @@ from __future__ import division
 
 import numpy as np
 import cPickle as pickle
+#import pickle;
 import os, sys
 import scipy.io
 
@@ -51,6 +52,7 @@ class dataprovider(object):
             sen_id = np.random.randint(len(pos_ind))
             # print img_id, sen_id
             sen = sens[pos_ind[sen_id]]
+
             if len(sen) > self.phrase_len:
                 sen = sen[:self.phrase_len]
 
@@ -65,11 +67,13 @@ class dataprovider(object):
 
             indicator[:len(sen)] = 1
             y = pos_ids[pos_ind[sen_id]]
+
             return img_feat, sen_token, enc_token, dec_token, indicator, y
         else:
             return None, None, None, None, None, -1
 
     def get_next_batch(self):
+
         img_feat_batch = np.zeros((self.batch_size, self.num_prop, self.img_feat_size)).astype('float')
         token_batch = np.zeros((self.batch_size, self.phrase_len)).astype('int')
         enc_batch = np.zeros((self.batch_size, self.phrase_len)).astype('int')
@@ -82,7 +86,7 @@ class dataprovider(object):
                 self._reset()
                 self.epoch_id += 1
                 self.is_save = True
-                print('Epoch %d complete'%(self.epoch_id))
+                print 'Epoch %d complete'%(self.epoch_id)
             img_id = self.train_list[self.train_id_list[self.cur_id]]        
             img_feat, sen_token, enc_token, dec_token, indicator, y = self._read_single_feat(img_id)
             if y != -1:
@@ -106,8 +110,11 @@ class dataprovider(object):
         gt_bbx_all = sen_feat['gt_box']     # ground truth bbx for query: [xmin, ymin, xmax, ymax]
         num_sample = len(pos_ids)
         num_corr = 0
-
+        #print(len(pos_ind));
         if len(pos_ids) > 0:
+            l = min(len(pos_ind), self.batch_size);
+	    if l < len(pos_ind):
+		print(len(pos_ind));
             img_feat = np.zeros((self.num_prop, self.img_feat_size)).astype('float')
             cur_feat = np.load('%s/%d.npy'%(self.img_feat_dir, img_id)).astype('float')
 
@@ -115,12 +122,14 @@ class dataprovider(object):
             cur_feat /= cur_feat_norm.reshape(cur_feat.shape[0], 1)
             
             img_feat[:cur_feat.shape[0], :] = cur_feat
-            sen_feat_batch = np.zeros((len(pos_ind), self.phrase_len)).astype('int')
-            mask_batch = np.zeros((len(pos_ind), self.phrase_len)).astype('int')
+            sen_feat_batch = np.zeros((l, self.phrase_len)).astype('int')
+            mask_batch = np.zeros((l, self.phrase_len)).astype('int')
             gt_batch = []
 
             sens = sen_feat['sens']
-            for sen_ind in range(len(pos_ind)):
+            #print(self.batch_size)
+            
+            for sen_ind in range(l):
                 cur_sen = sens[pos_ind[sen_ind]]
                 sen_token = np.ones(self.phrase_len)*(self.vocab_size-1)
                 sen_token = sen_token.astype('int')
@@ -129,12 +138,13 @@ class dataprovider(object):
                 sen_token[:len(cur_sen)] = cur_sen
                 sen_feat_batch[sen_ind] = sen_token
                 mask_batch[sen_ind][:len(cur_sen)] = 1
+
                 gt_batch.append(gt_pos_all[pos_ind[sen_ind]])
 
-            for sen_ind in range(len(pos_ids)):
-		print(img_id)
-		if not np.any(gt_bbx_all[sen_ind]):
-              		num_sample -= 1
+            for sen_ind in range(l):
+                #print(gt_bbx_all[sen_ind]);
+                if not np.any(gt_bbx_all[sen_ind]):
+                    num_sample -= 1
 
             return img_feat, sen_feat_batch, mask_batch, gt_batch, num_sample
         else:

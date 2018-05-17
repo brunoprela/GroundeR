@@ -14,10 +14,10 @@ FLICKR_ANNOTATIONS_PATH = '/Users/brunoprela/Documents/Projects/6.883/Flickr30kE
 FLICKR_SENTENCES_PATH = '/Users/brunoprela/Documents/Projects/6.883/Flickr30kEntities/Sentences'
 
 
-def read_mat(fn, dictionary):
+def read_mat(fn, dictionary, fid):
 	mat = scipy.io.loadmat(fn);
 	#dictionary = {};
-	size = len(dictonrary);
+	size = len(dictionary);
 	# read .mat file and convert to the right format in python 
 	result = {};
 	temp = mat['propList'];
@@ -34,7 +34,7 @@ def read_mat(fn, dictionary):
 	temp = mat['wordList'][0]
 	temp2 = [];
 	for i in range(len(temp)):
-		temp_list = [temp[i][j][0].astype('str')[0] for j in range(len(temp[i]))];
+		temp_list = [temp[i][j][0].astype('unicode')[0] for j in range(len(temp[i]))];
 		final_list = [];
 		for w in temp_list:
 			if w not in dictionary:
@@ -47,11 +47,14 @@ def read_mat(fn, dictionary):
 	 	temp2.append(final_list);
 	result['sens'] = temp2;
 	temp = mat['boxList'][0]
-	print(len(temp[0]))
+	#print(len(temp[0]))
 	temp2 = [temp[i][0].astype(int) for i in range(len(temp))]
 	result['gt_box'] = np.asmatrix(temp2);
-	print(result);
-	f = open('./annotation/6609688031.pkl', 'wb');
+
+	#print(result['gt_box']);
+	#print('\n')
+	#print(result['pos_id']);
+	f = open('./annotation/' + fid + '.pkl', 'wb');
 	pickle.dump(result, f, protocol=pickle.HIGHEST_PROTOCOL);
 	f.close();
 	
@@ -132,11 +135,24 @@ if __name__ == '__main__':
 	# annotation = eng.getAnnotations(fn);
 	# print annotation;
 	#get_gt_pos_all()
-	dictionary = {};
-	for f in os.listdir('./Flickr30kEntities/Annotations'):
-		fn = './annotation/' + f[:-4] + '.mat';
-		read_mat(fn, dictionary);
+	#dictionary = {};
+	#read_mat('./mat/2612125121.mat', dictionary, '2612125121')
 
+	alreadyDoneFile = open('alreadyDone.txt', 'rw')
+	alreadyDoneSet = set()
+	with alreadyDoneFile as input_file:
+    		for i, line in enumerate(input_file):
+			alreadyDoneSet.add(line[:-2])
+	
+	dictionary = {};
+	for f in os.listdir('./annotation2'):
+		if f[-4:] == '.mat':
+			fileNameOnly = f[:-4]
+			if fileNameOnly not in alreadyDoneSet:
+				fn = './annotation2/' + fileNameOnly + '.mat'
+				read_mat(fn, dictionary, fileNameOnly)
+				alreadyDoneFile = open('alreadyDone.txt','w')
+				alreadyDoneFile.write(fileNameOnly+"\n")
 		#read_mat('./6609688031.mat');
 	
 
