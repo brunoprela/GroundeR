@@ -10,3 +10,6 @@ model/*
 log/*
 !log/README.md
 annotation3
+annotation4
+flickr30k_inception
+flickr30k_resnet

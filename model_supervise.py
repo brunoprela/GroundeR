@@ -23,7 +23,7 @@ class ground_model(object):
 		self.init = self._init_param(config, 'init', 'axvier')
 		self.optim = self._init_param(config, 'optim', 'adam')
 		self.vocab_size = self._init_param(config, 'vocab_size', 17150)
-		self.img_feat_size = self._init_param(config, 'img_feat_size', 4096)
+		self.img_feat_size = self._init_param(config, 'img_feat_size', 2048)
 		self.dropout = self._init_param(config, 'dropout', 0.5)
 		self.num_lstm_layer = self._init_param(config, 'num_lstm_layer', 1)
 		self.num_prop = self._init_param(config, 'num_prop', 100)
