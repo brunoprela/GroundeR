@@ -75,7 +75,16 @@ def run_eval(sess, dataprovider, model, eval_op, feed_dict):
 			num_corr = 0
 			num_sample = len(bbx_gt_batch)
 			img_feat = feed_dict[model.vis_data]
-			for i in range(num_sample):
+			print 'bbx_gt_batch:\n'
+			print bbx_gt_batch
+			print 'num_sample_all: ' + str(num_sample_all)
+			print 'num_sample: ' + str(num_sample) 
+			print 'img_feat:\n'
+			print img_feat
+			print img_feat[0]
+			print len(img_feat)
+			print len(img_feat[0])
+			for i in range(len(img_feat)):	
 				img_feat[i] = img_feat_raw
 			sen_feat = feed_dict[model.sen_data]
 			sen_feat[:num_sample] = sen_feat_batch
@@ -102,11 +111,19 @@ def run_eval(sess, dataprovider, model, eval_op, feed_dict):
 	return accu
 
 def run_training():
-	train_list = []
-	test_list = []
-	config = Config()
-	train_list = load_img_id_list(config.train_file_list)
-	test_list = load_img_id_list(config.test_file_list)
+    	train_list = []
+    	test_list = []
+    	config = Config()
+    	# train_list = load_img_id_list(config.train_file_list)
+    	# test_list = load_img_id_list(config.test_file_list)
+    	train_list = np.array([1295719054, 4726677489]).astype('int');
+    	test_list = np.array([1295719054,4726677489]).astype('int');
+
+	#train_list = []
+	#test_list = []
+	#config = Config()
+	#train_list = load_img_id_list(config.train_file_list)
+	#test_list = load_img_id_list(config.test_file_list)
 
 	config.save_path = config.save_path + '_' + args.model_name
 	if not os.path.isdir(config.save_path):

@@ -27,6 +27,8 @@ def read_mat(fn, dictionary, fid):
 		if (len(temp_list) == 1) and (temp_list[0] == -2):
 			temp_list = [];
 		temp2.append(temp_list);
+	if len(temp2) > 40:
+		print len(temp2)
 	result['gt_pos_all'] = temp2;
 	temp = mat['propidList'];
 	result['pos_id'] = [temp[0][i].astype(int)[0][0] for i in range(len(temp[0]))];
@@ -145,11 +147,11 @@ if __name__ == '__main__':
 			alreadyDoneSet.add(line[:-2])
 	
 	dictionary = {};
-	for f in os.listdir('./annotation2'):
+	for f in os.listdir('./annotation3'):
 		if f[-4:] == '.mat':
 			fileNameOnly = f[:-4]
 			if fileNameOnly not in alreadyDoneSet:
-				fn = './annotation2/' + fileNameOnly + '.mat'
+				fn = './annotation3/' + fileNameOnly + '.mat'
 				read_mat(fn, dictionary, fileNameOnly)
 				alreadyDoneFile = open('alreadyDone.txt','w')
 				alreadyDoneFile.write(fileNameOnly+"\n")

@@ -34,6 +34,13 @@ class dataprovider(object):
 		sen_feat = np.load('%s/%d.pkl'%(self.sen_dir, img_id))
 		pos_ids = np.array(sen_feat['pos_id']).astype('int')
 		pos_ind = np.where(pos_ids != -1)[0]
+		print 'pos_ids:\n'
+		print pos_ids
+		print len(pos_ids)
+		print 'pos_ind:\n'
+		print pos_ind
+		print len(pos_ind)
+		assert(len(pos_ind) <= len(pos_ids))
 
 		if len(pos_ind) > 0:
 			img_feat = np.zeros((self.num_prop, self.img_feat_size))

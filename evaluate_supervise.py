@@ -17,7 +17,7 @@ args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 class Config(object):
-	batch_size = 40
+	batch_size = 100
 	img_feat_dir = './feature'
 	sen_dir = './annotation'
 	train_file_list = 'flickr30k_train_val.lst'

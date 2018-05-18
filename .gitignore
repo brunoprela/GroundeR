@@ -5,6 +5,8 @@ feature/*
 *.pyc
 annotation/*.pkl
 mat/*.mat
-annotation2/*.mat
+annotation2
 model/*
 log/*
+!log/README.md
+annotation3

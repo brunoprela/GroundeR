@@ -130,7 +130,7 @@ def run_evaluate():
 
 		feed_dict = update_feed_dict(cur_dataset, model, False)
 		print 'Restore model_%d'%restore_id
-		saver.restore(sess, './model/%s/model_%d.ckpt'%(config.save_path, restore_id)) 
+		saver.restore(sess, '%s/model_%d.ckpt'%(config.save_path, restore_id)) 
 				
 		print "-----------------------------------------------"
 		eval_accu = run_eval(sess, cur_dataset, model, logits, feed_dict)
