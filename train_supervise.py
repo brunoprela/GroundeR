@@ -18,7 +18,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 class Config(object):
 	batch_size = 40
-	img_feat_dir = './feature'
+	img_feat_dir = './flickr30k_resnet'
 	sen_dir = './annotation'
 	train_file_list = 'flickr30k_train_val.lst'
 	test_file_list = 'flickr30k_test.lst'
@@ -116,8 +116,8 @@ def run_training():
     	config = Config()
     	# train_list = load_img_id_list(config.train_file_list)
     	# test_list = load_img_id_list(config.test_file_list)
-    	train_list = np.array([1295719054, 4726677489]).astype('int');
-    	test_list = np.array([1295719054,4726677489]).astype('int');
+    	train_list = np.array([725722798, 129860826, 3376227992, 97138973, 2609797461, 2830869109]).astype('int');
+    	test_list = np.array([725722798, 129860826, 3376227992, 97138973, 2609797461, 2830869109]).astype('int');
 
 	#train_list = []
 	#test_list = []
