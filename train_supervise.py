@@ -116,8 +116,8 @@ def run_training():
     	config = Config()
     	# train_list = load_img_id_list(config.train_file_list)
     	# test_list = load_img_id_list(config.test_file_list)
-    	train_list = np.array([1295719054, 4726677489]).astype('int');
-    	test_list = np.array([1295719054,4726677489]).astype('int');
+    	train_list = np.array([1295719054, 4726677489]).astype('int')
+    	test_list = np.array([1295719054,4726677489]).astype('int')
 
 	#train_list = []
 	#test_list = []
