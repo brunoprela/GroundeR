@@ -10,6 +10,8 @@ from skimage.io import imread
 from skimage.segmentation import mark_boundaries
 import lime
 from lime import lime_image
+from PIL import Image as pil_image
+
 # from dataprovider_supervise import dataprovider
 # from model_supervise import ground_model
 
@@ -22,7 +24,7 @@ import numpy as np
 
 print('Notebook run using keras:', keras.__version__)
 
-from PIL import Image as pil_image
+
 _PIL_INTERPOLATION_METHODS = {
       'nearest': pil_image.NEAREST,
       'bilinear': pil_image.BILINEAR,
@@ -33,7 +35,7 @@ _PIL_INTERPOLATION_METHODS = {
 # img_name = '134206'
 # print img_name
 total_num = 1000
-num_sample = 10
+num_sample = 1
 num_exp = 1
 
 
@@ -43,8 +45,8 @@ num_exp = 1
 def transform_img_fn_gen(path_list, box, size):
     out = []
     for img_path in path_list:
-        temp = Image.open(img_path)
-        cropped = temp.crop(box);
+        temp = pil_image.open(img_path);
+        cropped = temp.crop(box.tolist()[0]);
         resample = _PIL_INTERPOLATION_METHODS['nearest']
         img = cropped.resize((size, size), resample)
         #img = image.load_img(img_path, target_size=(299, 299))
@@ -63,12 +65,9 @@ def load_box():
 	 	 file_list.append(img_name);
 	 	 with open('./annotation4/' + img_name + '.pkl', 'rb') as ann:
 	 	 	cur_data = pickle.load(ann);
-	 	 	box = [0, 0, 0, 0]
-	 	 	box_list = cur_data['pos_id']
-	 	 	for i in range(len(box_list)):
-	 	 		if box_list[i] != -1:
-	 	 			box = cur_data['gt_pos_all'][i][box_list[i]];
-	 	 	box_map[img_name] = box
+	 	 	box_list = cur_data['gt_box'];
+	 	 	index = np.random.randint(len(box_list));
+	 	 	box_map[img_name] = box_list[index];
 	 return file_list, box_map;
 
 
@@ -78,35 +77,36 @@ def sample(model, explainer, size, box_map, file_list):
     for i in range(num_exp):
         random_index = np.random.choice(total_num, num_sample, replace=False);
         for j in range(len(random_index)):
-            img_name = file_list[i];
-            box = box_map[img_name];
-            img = transform_img_fn_gen([img_name], box, size);
-            preds = model.predict(images_vgg)
+            img_name = './flickr30k_images/' + file_list[i] + '.jpg';
+            box = box_map[file_list[i]];
+            img = transform_img_fn_gen([img_name], box[0], size);
+            preds = model.predict(img)
             for x in decode_predictions(preds)[0]:
                 print(x)
-            explanation = explainer.explain_instance(img_name, model.predict, top_labels=1, hide_color=0, num_samples=1000)
-            temp, mask = explanation.get_image_and_mask(explanation.top_labels[0], positive_only=True, num_features=5, hide_rest=True)
-            result_vgg = mark_boundaries(temp / 2 + 0.5, mask);
-            plt.imshow(result_vgg);
-            plt.imsave(img_name + model.name + '.jpg', result_vgg);
+            explanation = explainer.explain_instance(img[0], model.predict, top_labels=1, hide_color=0, num_samples=1000)
+            temp, mask = explanation.get_image_and_mask(explanation.top_labels[0], positive_only=False, num_features=1, hide_rest=False)
+            result = mark_boundaries(temp / 2 + 0.5, mask);
+            plt.imshow(result);
+            plt.imsave(img_name + model.name + '.jpg', result);
 
 def run_lime():
 	explainer = lime_image.LimeImageExplainer()
 
-	inet_model = inc_net.InceptionV3()
-	res_model = res50.ResNet50();
-	incep_res_model = incep_res_net.InceptionResNetV2();
+	# inet_model = inc_net.InceptionV3()
+	# res_model = res50.ResNet50();
+	# incep_res_model = incep_res_net.InceptionResNetV2();
 	vgg_model = vgg16.VGG16()
 	file_list, box_map = load_box();
 	#VGG
 	sample(vgg_model, explainer, 224, box_map, file_list);
 	#resnet
-	# sample(res_model, explainer, 224, box_map, file_list);
+	sample(res_model, explainer, 224, box_map, file_list);
 	# #inception
-	# sample(inet_model, explainer, 299, box_map, file_list);  
+	sample(inet_model, explainer, 299, box_map, file_list);  
 
 if __name__ == '__main__':
 	run_lime();
+	#load_box()
 
 
 
