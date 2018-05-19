@@ -18,8 +18,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 class Config(object):
 	batch_size = 40
-	img_feat_dir = './flickr30k_resnet'
-	sen_dir = './annotation'
+	img_feat_dir = './feature'
+	sen_dir = './annotation4'
 	train_file_list = 'flickr30k_train_val.lst'
 	test_file_list = 'flickr30k_test.lst'
 	log_file = './log/ground_supervised'
@@ -75,15 +75,6 @@ def run_eval(sess, dataprovider, model, eval_op, feed_dict):
 			num_corr = 0
 			num_sample = len(bbx_gt_batch)
 			img_feat = feed_dict[model.vis_data]
-			print 'bbx_gt_batch:\n'
-			print bbx_gt_batch
-			print 'num_sample_all: ' + str(num_sample_all)
-			print 'num_sample: ' + str(num_sample) 
-			print 'img_feat:\n'
-			print img_feat
-			print img_feat[0]
-			print len(img_feat)
-			print len(img_feat[0])
 			for i in range(len(img_feat)):	
 				img_feat[i] = img_feat_raw
 			sen_feat = feed_dict[model.sen_data]
@@ -114,10 +105,10 @@ def run_training():
     	train_list = []
     	test_list = []
     	config = Config()
-    	# train_list = load_img_id_list(config.train_file_list)
-    	# test_list = load_img_id_list(config.test_file_list)
-    	train_list = np.array([725722798, 129860826, 3376227992, 97138973, 2609797461, 2830869109]).astype('int');
-    	test_list = np.array([725722798, 129860826, 3376227992, 97138973, 2609797461, 2830869109]).astype('int');
+    	train_list = load_img_id_list(config.train_file_list)
+    	test_list = load_img_id_list(config.test_file_list)
+    	#train_list = np.array([322563288, 129860826, 3376227992, 97138973, 2609797461, 2830869109]).astype('int');
+    	#test_list = np.array([322563288, 129860826, 3376227992, 97138973, 2609797461, 2830869109]).astype('int');
 
 	#train_list = []
 	#test_list = []
@@ -147,6 +138,7 @@ def run_training():
 		sess.run(init)
 		saver = tf.train.Saver(max_to_keep=100)
 		duration = 0.0
+		# accuFile = open('accuFile.txt', 'w')
 
 		for step in xrange(config.max_step):
 			start_time = time.time()
@@ -161,7 +153,9 @@ def run_training():
 
 			if step%10 == 0:
 				cur_accu = eval_cur_batch(feed_dict[model.bbx_label], cur_logits, True)
+				
 				print 'Step %d: loss = %.4f, accu = %.4f (%.4f sec)'%(step, loss_value, cur_accu, duration/10.0)				
+				# accuFile.write(str(cur_accu) + '\n')
 				duration = 0.0
 				
 			if (step%600)==0:
@@ -172,6 +166,7 @@ def run_training():
 				model.batch_size = config.batch_size
 				cur_dataset.is_save = False
 	log.close()
+	# accuFile.close()
 
 def main(_):
 	run_training()

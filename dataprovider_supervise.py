@@ -17,7 +17,7 @@ class dataprovider(object):
 		self.cur_id = 0
 		self.epoch_id = 0
 		self.num_prop = 100
-		self.img_feat_size = 2048
+		self.img_feat_size = 4096
 		self.num_test = 1000
 		self.batch_size = batch_size
 		self.vocab_size = vocab_size
@@ -34,13 +34,15 @@ class dataprovider(object):
 		sen_feat = np.load('%s/%d.pkl'%(self.sen_dir, img_id))
 		pos_ids = np.array(sen_feat['pos_id']).astype('int')
 		pos_ind = np.where(pos_ids != -1)[0]
-		print 'pos_ids:\n'
-		print pos_ids
-		print len(pos_ids)
-		print 'pos_ind:\n'
-		print pos_ind
-		print len(pos_ind)
-		assert(len(pos_ind) <= len(pos_ids))
+		#print 'pos_ids:\n'
+		#print pos_ids
+		#print len(pos_ids)
+		#print 'pos_ind:\n'
+		#print pos_ind
+		#print len(pos_ind)
+		#assert(len(pos_ind) <= len(pos_ids))
+		#print sen_feat['sens']
+		#print len(sen_feat['sens'])
 
 		if len(pos_ind) > 0:
 			img_feat = np.zeros((self.num_prop, self.img_feat_size))
@@ -127,7 +129,7 @@ if __name__ == '__main__':
 	cur_dataset = dataprovider(train_list, test_list, img_feat_dir, sen_dir, vocab_size)
 	for i in range(10000):
 		img_feat_batch, token_batch, y_batch = cur_dataset.get_next_batch()
-		print img_feat_batch.shape
+		#print img_feat_batch.shape
 		print y_batch
 		print '%d/%d'%(cur_dataset.cur_id, len(cur_dataset.train_list))
 

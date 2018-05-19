@@ -23,7 +23,7 @@ class ground_model(object):
 		self.init = self._init_param(config, 'init', 'axvier')
 		self.optim = self._init_param(config, 'optim', 'adam')
 		self.vocab_size = self._init_param(config, 'vocab_size', 17150)
-		self.img_feat_size = self._init_param(config, 'img_feat_size', 2048)
+		self.img_feat_size = self._init_param(config, 'img_feat_size', 4096)
 		self.dropout = self._init_param(config, 'dropout', 0.5)
 		self.num_lstm_layer = self._init_param(config, 'num_lstm_layer', 1)
 		self.num_prop = self._init_param(config, 'num_prop', 100)
@@ -50,7 +50,7 @@ class ground_model(object):
 			dropout = self.dropout
 
 		text_seq_batch = tf.transpose(sen_data, [1, 0])	# input data is [num_steps, batch_size]
-		with tf.variable_scope('word_embedding'), tf.device("/job:localhost/replica:0/task:0/device:CPU:0"):
+		with tf.variable_scope('word_embedding'), tf.device("/cpu:0"):
 			embedding_mat = tf.get_variable("embedding", [self.vocab_size, self.lstm_dim], tf.float32,
 				initializer=tf.contrib.layers.xavier_initializer(uniform=True))
 			# text_seq has shape [T, N] and embedded_seq has shape [T, N, D].

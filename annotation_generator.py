@@ -32,8 +32,11 @@ def read_mat(fn, dictionary, fid):
 	result['gt_pos_all'] = temp2;
 	temp = mat['propidList'];
 	result['pos_id'] = [temp[0][i].astype(int)[0][0] for i in range(len(temp[0]))];
-	#print(result['pos_id'])
+
+	print(result['pos_id'])
+
 	temp = mat['wordList'][0]
+	print temp
 	temp2 = [];
 	for i in range(len(temp)):
 		temp_list = [temp[i][j][0].astype('unicode')[0] for j in range(len(temp[i]))];
@@ -47,9 +50,13 @@ def read_mat(fn, dictionary, fid):
 				final_list.append(dictionary[w]);
 
 	 	temp2.append(final_list);
-	result['sens'] = temp2;
+	print temp2
+
+	result['sens'] = temp2
 	temp = mat['boxList'][0]
-	#print(len(temp[0]))
+
+	print(len(temp[0]))
+
 	temp2 = [temp[i][0].astype(int) for i in range(len(temp))]
 	result['gt_box'] = np.asmatrix(temp2);
 
@@ -145,7 +152,10 @@ if __name__ == '__main__':
 	with alreadyDoneFile as input_file:
     		for i, line in enumerate(input_file):
 			alreadyDoneSet.add(line[:-2])
+	dictionary = {}
+	read_mat('./annotation3/322563288.mat', dictionary, '322563288')	
 	
+	'''	
 	dictionary = {};
 	for f in os.listdir('./annotation3'):
 		if f[-4:] == '.mat':
@@ -156,7 +166,7 @@ if __name__ == '__main__':
 				alreadyDoneFile = open('alreadyDone.txt','w')
 				alreadyDoneFile.write(fileNameOnly+"\n")
 		#read_mat('./6609688031.mat');
-	
+	'''
 
 
 

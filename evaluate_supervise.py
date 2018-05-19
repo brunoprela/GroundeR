@@ -19,7 +19,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 class Config(object):
 	batch_size = 100
 	img_feat_dir = './feature'
-	sen_dir = './annotation'
+	sen_dir = './annotation4'
 	train_file_list = 'flickr30k_train_val.lst'
 	test_file_list = 'flickr30k_test.lst'
 	log_file = './log/ground_supervised'
@@ -130,7 +130,7 @@ def run_evaluate():
 
 		feed_dict = update_feed_dict(cur_dataset, model, False)
 		print 'Restore model_%d'%restore_id
-		saver.restore(sess, './model/%s/model_%d.ckpt'%(config.save_path, restore_id)) 
+		saver.restore(sess, '%s/model_%d.ckpt'%(config.save_path, restore_id)) 
 				
 		print "-----------------------------------------------"
 		eval_accu = run_eval(sess, cur_dataset, model, logits, feed_dict)
