@@ -19,7 +19,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 class Config(object):
 	batch_size = 100
 	img_feat_dir = '../flickr30k_inception'
-	sen_dir = './annotation4'
+	sen_dir = './annotation'
 	train_file_list = 'training_list.lst'
 	test_file_list = 'testing_list.lst'
 	log_file = './log/ground_supervised'
