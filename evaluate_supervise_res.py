@@ -3,8 +3,8 @@ import os, sys
 import numpy as np
 import time
 
-from dataprovider_supervise import dataprovider
-from model_supervise import ground_model
+from dataprovider_supervise_res import dataprovider
+from model_supervise_res import ground_model
 from util.iou import calc_iou
 import argparse
 
@@ -18,7 +18,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 class Config(object):
 	batch_size = 100
-	img_feat_dir = './feature'
+	img_feat_dir = '../flickr30k_resnet'
 	sen_dir = './annotation4'
 	train_file_list = 'training_list.lst'
 	test_file_list = 'testing_list.lst'
@@ -44,12 +44,14 @@ def update_feed_dict(dataprovider, model, is_train):
 def eval_cur_batch(gt_label, cur_logits, is_train=True, num_sample=0):
 	res_prob = cur_logits
 	res_label = np.argmax(res_prob, axis=1)
-
+	print(res_label)
+	
 	accu = 0.0
 	if is_train:
 		accu = float(np.sum(res_label == gt_label)) / float(len(gt_label))
 	else:
 		for gt_id, cur_gt in enumerate(gt_label):
+			print(cur_gt)
 			if res_label[gt_id] in cur_gt:
 				accu += 1.0
 
@@ -89,6 +91,7 @@ def run_eval(sess, dataprovider, model, eval_op, feed_dict):
 
 			cur_att_logits = sess.run(eval_op, feed_dict=eval_feed_dict)
 			cur_att_logits = cur_att_logits[:num_sample]
+			print(len(bbx_label));
 			cur_accuracy = eval_cur_batch(bbx_gt_batch, cur_att_logits, False, num_sample_all)
 
 			print '%d/%d: %d/%d, %.4f'%(img_ind, len(dataprovider.test_list), num_sample, num_sample_all, cur_accuracy)
@@ -106,8 +109,9 @@ def run_evaluate():
 	test_list = []
 	config = Config()
 	train_list = load_img_id_list(config.train_file_list)
-	test_list = load_img_id_list(config.test_file_list)
-
+	#test_list = load_img_id_list(config.test_file_list)
+	test_list = np.array([12142386]).astype(int);
+	
 	config.save_path = config.save_path + '_' + args.model_name
 	assert(os.path.isdir(config.save_path))
 	restore_id = args.restore_id

@@ -17,7 +17,7 @@ class dataprovider(object):
 		self.cur_id = 0
 		self.epoch_id = 0
 		self.num_prop = 100
-		self.img_feat_size = 4096
+		self.img_feat_size = 2048
 		self.num_test = 1000
 		self.batch_size = batch_size
 		self.vocab_size = vocab_size

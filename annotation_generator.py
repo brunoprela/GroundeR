@@ -15,18 +15,18 @@ FLICKR_SENTENCES_PATH = '/Users/brunoprela/Documents/Projects/6.883/Flickr30kEnt
 
 
 def read_mat(fn, dictionary, fid):
-	mat = scipy.io.loadmat(fn);
-	#dictionary = {};
-	size = len(dictionary);
+	mat = scipy.io.loadmat(fn)
+	#dictionary = {}
+	size = len(dictionary)
 	# read .mat file and convert to the right format in python 
-	result = {};
-	temp = mat['propList'];
-	temp2 = [];
+	result = {}
+	temp = mat['propList']
+	temp2 = []
 	for i in range(len(temp[0])):
-		temp_list = temp[0][i][0].astype(int).tolist();
+		temp_list = temp[0][i][0].astype(int).tolist()
 		if (len(temp_list) == 1) and (temp_list[0] == -2):
-			temp_list = [];
-		temp2.append(temp_list);
+			temp_list = []
+		temp2.append(temp_list)
 	if len(temp2) > 40:
 		print len(temp2)
 	result['gt_pos_all'] = temp2;
@@ -39,15 +39,15 @@ def read_mat(fn, dictionary, fid):
 	print temp
 	temp2 = [];
 	for i in range(len(temp)):
-		temp_list = [temp[i][j][0].astype('unicode')[0] for j in range(len(temp[i]))];
-		final_list = [];
+		temp_list = [temp[i][j][0].astype('unicode')[0] for j in range(len(temp[i]))]
+		final_list = []
 		for w in temp_list:
 			if w not in dictionary:
-				dictionary[w] = size;
-				final_list.append(size);
-				size += 1;
+				dictionary[w] = size
+				final_list.append(size)
+				size += 1
 			else:
-				final_list.append(dictionary[w]);
+				final_list.append(dictionary[w])
 
 	 	temp2.append(final_list);
 	print temp2
@@ -58,26 +58,26 @@ def read_mat(fn, dictionary, fid):
 	print(len(temp[0]))
 
 	temp2 = [temp[i][0].astype(int) for i in range(len(temp))]
-	result['gt_box'] = np.asmatrix(temp2);
+	result['gt_box'] = np.asmatrix(temp2)
 
-	#print(result['gt_box']);
+	#print(result['gt_box'])
 	#print('\n')
-	#print(result['pos_id']);
-	f = open('./annotation/' + fid + '.pkl', 'wb');
-	pickle.dump(result, f, protocol=pickle.HIGHEST_PROTOCOL);
-	f.close();
+	#print(result['pos_id'])
+	f = open('./annotation/' + fid + '.pkl', 'wb')
+	pickle.dump(result, f, protocol=pickle.HIGHEST_PROTOCOL)
+	f.close()
 	
 
 # Helper Functions
 
 def get_Iou(b1, b2):
-	xmin = np.max(b1[0], b2[0]);
-	ymin = np.max(b1[1], b2[1]);
-	xmax = np.min(b1[2], b2[2]);
-	ymax = np.min(b1[3], b2[3]);
+	xmin = np.max(b1[0], b2[0])
+	ymin = np.max(b1[1], b2[1])
+	xmax = np.min(b1[2], b2[2])
+	ymax = np.min(b1[3], b2[3])
 
-	intersection = get_area(xmax - xmin, ymax - ymin);
-	union = get_area(b1[2] - b1[0], b1[3] - b1[1]) + get_area(b2[2] - b2[0], b2[3] - b2[1]) - intersection;
+	intersection = get_area(xmax - xmin, ymax - ymin)
+	union = get_area(b1[2] - b1[0], b1[3] - b1[1]) + get_area(b2[2] - b2[0], b2[3] - b2[1]) - intersection
 	return intersection / union
 
 def get_area(w, h):
@@ -138,13 +138,13 @@ def get_gt_box(ann, dict):
 	return
 
 if __name__ == '__main__':
-	# eng = matlab.engine.start_matlab();
+	# eng = matlab.engine.start_matlab()
 	# fn = './Flickr30kEntities/Annotations/6609688031.xml'
 	# #print type(eng.getAnnotations())
-	# annotation = eng.getAnnotations(fn);
-	# print annotation;
+	# annotation = eng.getAnnotations(fn)
+	# print annotation
 	#get_gt_pos_all()
-	#dictionary = {};
+	#dictionary = {}
 	#read_mat('./mat/2612125121.mat', dictionary, '2612125121')
 
 	alreadyDoneFile = open('alreadyDone.txt', 'rw')
@@ -155,8 +155,7 @@ if __name__ == '__main__':
 	dictionary = {}
 	read_mat('./annotation3/322563288.mat', dictionary, '322563288')	
 	
-	'''	
-	dictionary = {};
+	dictionary = {}
 	for f in os.listdir('./annotation3'):
 		if f[-4:] == '.mat':
 			fileNameOnly = f[:-4]
@@ -166,7 +165,6 @@ if __name__ == '__main__':
 				alreadyDoneFile = open('alreadyDone.txt','w')
 				alreadyDoneFile.write(fileNameOnly+"\n")
 		#read_mat('./6609688031.mat');
-	'''
 
 
 

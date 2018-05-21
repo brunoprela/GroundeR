@@ -39,11 +39,13 @@ def get_vector(img):
 if __name__ == "__main__":
 
 
-    FLICKR30K_IMAGE_DIR = '/Users/brunoprela/Documents/Projects/6.883/flickr30k_images/flickr30k_images'
-    FLICKR30K_IMAGE_BBX_SS_DIR = '/Users/brunoprela/Documents/Projects/6.883/flickr30k_img_bbx_ss'
-    FLICKR30K_RESNET_DIR = '/Users/brunoprela/Documents/Projects/6.883/flickr30k_resnet'
+    FLICKR30K_IMAGE_DIR = '/home/brunoprela/6.883/flickr30k_images'
+    FLICKR30K_IMAGE_BBX_SS_DIR = '/home/brunoprela/6.883/flickr30k_img_bbx_ss'
+    FLICKR30K_RESNET_DIR = '/home/brunoprela/6.883/flickr30k_resnet'
     # loop through images
-    for filename in os.listdir(FLICKR30K_IMAGE_DIR):
+    count = 1
+    #for filename in os.listdir(FLICKR30K_IMAGE_DIR):
+    for filename in ['12142386.jpg']:
         # initialize output
         result = []
         # open the image
@@ -52,8 +54,11 @@ if __name__ == "__main__":
         # load the box matrix, boxes in 'cur_bbxes'
         data = loadmat(FLICKR30K_IMAGE_BBX_SS_DIR + '/' + image_name + '.mat')
         # loop through the box matrix
+	print image_name
         for area in data['cur_bbxes']:
             cropped_img = img.crop(area)
             feat_vector = get_vector(cropped_img)
             result.append([feat_vector[0][i][0][0].numpy() for i in range(feat_vector.shape[1])])
         np.save(FLICKR30K_RESNET_DIR + '/' + image_name + '.npy', result)
+        count += 1
+	print 'count: ' + str(count)

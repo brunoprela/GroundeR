@@ -20,8 +20,8 @@ class Config(object):
 	batch_size = 40
 	img_feat_dir = './feature'
 	sen_dir = './annotation4'
-	train_file_list = 'flickr30k_train_val.lst'
-	test_file_list = 'flickr30k_test.lst'
+	train_file_list = 'training_list.lst'
+	test_file_list = 'testing_list.lst'
 	log_file = './log/ground_supervised'
 	save_path = './model/ground_supervised'
 	vocab_size = 17150	
@@ -75,6 +75,15 @@ def run_eval(sess, dataprovider, model, eval_op, feed_dict):
 			num_corr = 0
 			num_sample = len(bbx_gt_batch)
 			img_feat = feed_dict[model.vis_data]
+			# print 'bbx_gt_batch:\n'
+			# print bbx_gt_batch
+			# print 'num_sample_all: ' + str(num_sample_all)
+			# print 'num_sample: ' + str(num_sample)
+			# print 'img_feat:\n'
+			# print img_feat
+			# print img_feat[0]
+			# print len(img_feat)
+			# print len(img_feat[0])
 			for i in range(len(img_feat)):	
 				img_feat[i] = img_feat_raw
 			sen_feat = feed_dict[model.sen_data]

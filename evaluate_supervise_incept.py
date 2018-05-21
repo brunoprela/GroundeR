@@ -3,8 +3,8 @@ import os, sys
 import numpy as np
 import time
 
-from dataprovider_supervise import dataprovider
-from model_supervise import ground_model
+from dataprovider_supervise_inception import dataprovider
+from model_supervise_inception import ground_model
 from util.iou import calc_iou
 import argparse
 
@@ -18,7 +18,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 class Config(object):
 	batch_size = 100
-	img_feat_dir = './feature'
+	img_feat_dir = '../flickr30k_inception'
 	sen_dir = './annotation4'
 	train_file_list = 'training_list.lst'
 	test_file_list = 'testing_list.lst'
