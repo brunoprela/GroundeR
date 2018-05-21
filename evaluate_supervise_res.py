@@ -1,11 +1,9 @@
 import tensorflow as tf
-import os, sys
+import os
 import numpy as np
-import time
 
 from dataprovider_supervise_res import dataprovider
 from model_supervise_res import ground_model
-from util.iou import calc_iou
 import argparse
 
 parser = argparse.ArgumentParser()

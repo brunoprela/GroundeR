@@ -1,14 +1,7 @@
 from __future__ import division
 import tensorflow as tf
 
-import numpy as np
-import cPickle as pickle
-import os, sys
-import scipy.io
-import time
 from util.rnn import lstm_layer as lstm
-from util.cnn import fc_relu_layer as fc_relu
-from util.cnn import fc_layer as fc
 from util.cnn import conv_layer as conv
 from util.bn import batch_norm as bn
 from util.custom_init import msr_init

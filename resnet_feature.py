@@ -38,14 +38,12 @@ def get_vector(img):
 
 if __name__ == "__main__":
 
-
     FLICKR30K_IMAGE_DIR = '/home/brunoprela/6.883/flickr30k_images'
     FLICKR30K_IMAGE_BBX_SS_DIR = '/home/brunoprela/6.883/flickr30k_img_bbx_ss'
     FLICKR30K_RESNET_DIR = '/home/brunoprela/6.883/flickr30k_resnet'
     # loop through images
     count = 1
-    #for filename in os.listdir(FLICKR30K_IMAGE_DIR):
-    for filename in ['12142386.jpg']:
+    for filename in os.listdir(FLICKR30K_IMAGE_DIR):
         # initialize output
         result = []
         # open the image

@@ -34,26 +34,15 @@ class dataprovider(object):
 		sen_feat = np.load('%s/%d.pkl'%(self.sen_dir, img_id))
 		pos_ids = np.array(sen_feat['pos_id']).astype('int')
 		pos_ind = np.where(pos_ids != -1)[0]
-		#print 'pos_ids:\n'
-		#print pos_ids
-		#print len(pos_ids)
-		#print 'pos_ind:\n'
-		#print pos_ind
-		#print len(pos_ind)
-		#assert(len(pos_ind) <= len(pos_ids))
-		#print sen_feat['sens']
-		#print len(sen_feat['sens'])
 
 		if len(pos_ind) > 0:
 			img_feat = np.zeros((self.num_prop, self.img_feat_size))
-			# print '%s/%d.npy'%(self.img_feat_dir, img_id)
 			cur_feat = np.load('%s/%d.npy'%(self.img_feat_dir, img_id))
 			img_feat[:cur_feat.shape[0], :] = cur_feat
 			img_feat = img_feat.astype('float')
 
 			sens = sen_feat['sens']
 			sen_id = np.random.randint(len(pos_ind))
-			# print img_id, sen_id
 			sen = sens[pos_ind[sen_id]]
 			# pad sen tokens to phrase_len with UNK token as (self.vocab_size-1)
 			sen_token = np.ones(self.phrase_len)*(self.vocab_size-1)	
@@ -82,9 +71,7 @@ class dataprovider(object):
 				token_batch[num_cnt] = sen_token
 				y_batch[num_cnt] = y
 				num_cnt += 1
-			# else:
-			# 	print('No positive samples for %d'%(self.train_list[self.train_id_list[self.cur_id]]))
-			self.cur_id += 1		
+			self.cur_id += 1
 		return img_feat_batch, token_batch, y_batch
 
 	def get_test_feat(self, img_id):
@@ -99,7 +86,6 @@ class dataprovider(object):
 			cur_feat = np.load('%s/%d.npy'%(self.img_feat_dir, img_id)).astype('float')
 			img_feat[:cur_feat.shape[0], :] = cur_feat
 			sen_feat_batch = np.zeros((len(pos_ind), self.phrase_len)).astype('int')
-			# y_batch = np.zeros(len(pos_ind)).astype('int')
 			gt_batch = []
 
 			sens = sen_feat['sens']
@@ -111,7 +97,6 @@ class dataprovider(object):
 				sen_feat_batch[sen_ind] = sen_token
 				gt_batch.append(gt_pos_all[pos_ind[sen_ind]])
 
-			# print y_batch
 			return img_feat, sen_feat_batch, gt_batch, num_sample
 		else:
 			return None, None, None, 0
@@ -129,7 +114,6 @@ if __name__ == '__main__':
 	cur_dataset = dataprovider(train_list, test_list, img_feat_dir, sen_dir, vocab_size)
 	for i in range(10000):
 		img_feat_batch, token_batch, y_batch = cur_dataset.get_next_batch()
-		#print img_feat_batch.shape
 		print y_batch
 		print '%d/%d'%(cur_dataset.cur_id, len(cur_dataset.train_list))
 

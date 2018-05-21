@@ -1,8 +1,5 @@
 import numpy as np
-#import pandas as pd
-#import selectivesearch
 import os
-#import imageio
 import scipy.io
 import pickle
 
@@ -16,7 +13,6 @@ FLICKR_SENTENCES_PATH = '/Users/brunoprela/Documents/Projects/6.883/Flickr30kEnt
 
 def read_mat(fn, dictionary, fid):
 	mat = scipy.io.loadmat(fn)
-	#dictionary = {}
 	size = len(dictionary)
 	# read .mat file and convert to the right format in python 
 	result = {}
@@ -27,17 +23,14 @@ def read_mat(fn, dictionary, fid):
 		if (len(temp_list) == 1) and (temp_list[0] == -2):
 			temp_list = []
 		temp2.append(temp_list)
-	if len(temp2) > 40:
-		print len(temp2)
-	result['gt_pos_all'] = temp2;
-	temp = mat['propidList'];
-	result['pos_id'] = [temp[0][i].astype(int)[0][0] for i in range(len(temp[0]))];
+	result['gt_pos_all'] = temp2
+	temp = mat['propidList']
+	result['pos_id'] = [temp[0][i].astype(int)[0][0] for i in range(len(temp[0]))]
 
 	print(result['pos_id'])
 
 	temp = mat['wordList'][0]
-	print temp
-	temp2 = [];
+	temp2 = []
 	for i in range(len(temp)):
 		temp_list = [temp[i][j][0].astype('unicode')[0] for j in range(len(temp[i]))]
 		final_list = []
@@ -49,8 +42,7 @@ def read_mat(fn, dictionary, fid):
 			else:
 				final_list.append(dictionary[w])
 
-	 	temp2.append(final_list);
-	print temp2
+	 	temp2.append(final_list)
 
 	result['sens'] = temp2
 	temp = mat['boxList'][0]
@@ -60,9 +52,6 @@ def read_mat(fn, dictionary, fid):
 	temp2 = [temp[i][0].astype(int) for i in range(len(temp))]
 	result['gt_box'] = np.asmatrix(temp2)
 
-	#print(result['gt_box'])
-	#print('\n')
-	#print(result['pos_id'])
 	f = open('./annotation/' + fid + '.pkl', 'wb')
 	pickle.dump(result, f, protocol=pickle.HIGHEST_PROTOCOL)
 	f.close()
@@ -116,9 +105,6 @@ def get_gt_pos_all():
 
 		print "Candidate size: " + len(candidates)
 
-		# for region in candidates:
-		# 	for annotations in
-	# regions[:10]
 	return
 
 
@@ -138,23 +124,13 @@ def get_gt_box(ann, dict):
 	return
 
 if __name__ == '__main__':
-	# eng = matlab.engine.start_matlab()
-	# fn = './Flickr30kEntities/Annotations/6609688031.xml'
-	# #print type(eng.getAnnotations())
-	# annotation = eng.getAnnotations(fn)
-	# print annotation
-	#get_gt_pos_all()
-	#dictionary = {}
-	#read_mat('./mat/2612125121.mat', dictionary, '2612125121')
 
 	alreadyDoneFile = open('alreadyDone.txt', 'rw')
 	alreadyDoneSet = set()
 	with alreadyDoneFile as input_file:
     		for i, line in enumerate(input_file):
 			alreadyDoneSet.add(line[:-2])
-	dictionary = {}
-	read_mat('./annotation3/322563288.mat', dictionary, '322563288')	
-	
+
 	dictionary = {}
 	for f in os.listdir('./annotation3'):
 		if f[-4:] == '.mat':
@@ -164,7 +140,6 @@ if __name__ == '__main__':
 				read_mat(fn, dictionary, fileNameOnly)
 				alreadyDoneFile = open('alreadyDone.txt','w')
 				alreadyDoneFile.write(fileNameOnly+"\n")
-		#read_mat('./6609688031.mat');
 
 
 

@@ -1,4 +1,3 @@
-import os, sys
 import numpy as np
 import keras
 from keras.applications import inception_v3 as inc_net
@@ -7,7 +6,6 @@ from keras.applications import inception_resnet_v2 as incep_res_net
 from keras.applications import vgg16 as vgg16
 from keras.preprocessing import image
 from keras.applications.imagenet_utils import decode_predictions
-from skimage.io import imread
 import matplotlib.pyplot as plt
 import lime
 from lime import lime_image

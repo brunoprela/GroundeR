@@ -3,7 +3,7 @@ This repository contains implementation for *Grounding of Textual Phrases in Ima
 
 ## Setup
 
-> Note: Please read the feature representation files in ```feature``` and ```annotation``` directories before using the code.
+> Note: Please read the feature representation files in ```feature``` and ```annotation``` directories before using the code. Also please make sure to replace all path constants in the files with your own path constants!
 
 **Platform:** matlab_R2016a for representation files, Python 2.7 for training, evaluation, explanations<br/>
 
