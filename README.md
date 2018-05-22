@@ -11,9 +11,13 @@ To setup a virtual environment named 'env' type: ```virtualenv env -p python2```
 
 To enter your virtual environment type: ```source env/bin/activate```. Then install dependencies by doing ```pip install -r requirements.txt```. Complete whatever Python actions you need within this environment and then deactivate it by typing ```deactivate``` when you are done.
 
-**Visual features:** TODO We use [Faster-RCNN](https://github.com/endernewton/tf-faster-rcnn) pre-trained on PASCAL 2012 VOC for [Flickr30K Entities](http://web.engr.illinois.edu/~bplumme2/Flickr30kEntities/), and pre-trained on ImageNet for [Referit Game](http://tamaraberg.com/referitgame/). Please put visual features in the ```feature``` directory (More details can be seen in the [```README.md```](./feature/README.md) in this directory). (Fine-tuned features can achieve better performance, which are available in this [repository](https://github.com/kanchen-usc/QRC-Net)).<br/>
-**Sentence features:** TODO We encode one-hot vector for each query, as well as the annotation for each query and image pair. Please put the encoded features in the ```annotation``` directory (More details are provided in the [```README.md```](./annotation/README.md) in this directory).<br/>
-**File list:** TODO We generate a file list for each image in the Flickr30K Entities. If you would like to train and test on other dataset (e.g. [Referit Game](http://tamaraberg.com/referitgame/)), please follow the similar format in the ```flickr_train_val.lst``` and ```flickr_test.lst```.<br/>
+**Visual features:** We use [GroundeR: [Faster-RCNN](https://github.com/endernewton/tf-faster-rcnn) pre-trained on PASCAL 2012 VOC; GroundeR-ResNet: ResNet50 Pretrained on ImageNet. GroundeR-Inspection: InceptionV3 pretrained on ImageNet]for [Flickr30K Entities](http://web.engr.illinois.edu/~bplumme2/Flickr30kEntities/). Please put visual features in the ```feature``` directory (More details can be seen in the [```README.md```](./feature/README.md) in this directory). (Fine-tuned features can achieve better performance, which are available in this [repository](https://github.com/kanchen-usc/QRC-Net)).<br/>
+
+**Sentence features:** TODO We encode one-hot vector for each query, </br>
+
+**Annotation:** We generate annotation for each query and image pair. Please put the encoded features in the ```annotation``` directory (More details are provided in the [```README.md```](./annotation/README.md) in this directory).<br/>
+
+**File list:** TODO We generate a list containing all images in the Flickr30K Entities for training and testing set respectively . If you would like to train and test on other dataset (e.g. [Referit Game](http://tamaraberg.com/referitgame/)), please follow the similar format in the ```flickr_train_val.lst``` and ```flickr_test.lst```.<br/>
 **Hyper parameters:** TODO Please check the ```Config``` class in the ```train_supervise.py``` and ```train_unsupervise.py```.
 
 ## Training & Test
