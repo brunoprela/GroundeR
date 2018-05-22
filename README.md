@@ -17,8 +17,8 @@ To enter your virtual environment type: ```source env/bin/activate```. Then inst
 
 **Annotation:** We generate annotation for each query and image pair. Please put the encoded features in the ```annotation``` directory (More details are provided in the [```README.md```](./annotation/README.md) in this directory).<br/>
 
-**File list:** TODO We generate a list containing all images in the Flickr30K Entities for training and testing set respectively . If you would like to train and test on other dataset (e.g. [Referit Game](http://tamaraberg.com/referitgame/)), please follow the similar format in the ```flickr_train_val.lst``` and ```flickr_test.lst```.<br/>
-**Hyper parameters:** TODO Please check the ```Config``` class in the ```train_supervise.py``` and ```train_unsupervise.py```.
+**File list:** We generate a list containing all images in the Flickr30K Entities for training and testing set respectively . If you would like to train and test on other dataset (e.g. [Referit Game](http://tamaraberg.com/referitgame/)), please follow the similar format in the ```flickr_train_val.lst``` and ```flickr_test.lst```.<br/>
+**Hyper parameters:** Please check the ```Config``` class in the ```train_supervise.py``` and ```train_unsupervise.py```.
 
 ## Training & Test
 
